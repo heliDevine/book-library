@@ -6,7 +6,7 @@
 	"scripts": {
 		"pretest": "node scripts/create-database.js test",
 		"test": "mocha tests/**/*.js --exit --recursive --timeout 60000 --file ./tests/test-setup.js",
-		"posttest":"node scripts/drop-database.js",
+		"posttest": "node scripts/drop-database.js",
 		"start": "nodemon -r dotenv/config index.js",
 		"prestart": "node scripts/create-database.js"
 	},
@@ -22,7 +22,8 @@
 	"homepage": "https://github.com/heliDevine/book-library#readme",
 	"dependencies": {
 		"express": "^4.17.2",
-		"mysql2": "^2.3.3"
+		"mysql2": "^2.3.3",
+		"sequelize": "^6.12.4"
 	},
 	"devDependencies": {
 		"chai": "^4.3.4",
