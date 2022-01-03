@@ -11,9 +11,7 @@ describe("/readers", () => {
 	describe("with no records in the database", () => {
 		describe("POST/readers", () => {
 			it("creates a new reader in the database", async () => {
-				const response = await (
-					await request(app).post("/readers")
-				).send({
+				const response = await request(app).post("/readers").send({
 					name: "Elizabeth Bennet",
 					email: "future_ms_darcy@gmail.com",
 				});
