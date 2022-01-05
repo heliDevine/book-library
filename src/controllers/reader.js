@@ -1,4 +1,5 @@
 // const { Reader } = require("../models");
+const app = require("../app");
 const { Reader } = require("../models");
 
 exports.create = async (req, res) => {
@@ -6,7 +7,12 @@ exports.create = async (req, res) => {
 	res.status(201).json(newReader);
 	console.log("****hello from *****222 create function");
 };
-/// MY SOLUTION
+
+exports.findAll = async (req, res) => {
+	await Reader.findAll().then((readers) => res.json(readers));
+};
+
+/// MY SOLUTION TO CREATE FUNCTION
 
 // exports.create = (req, res) => {
 // 	Reader.create(req.body)

@@ -16,7 +16,8 @@ app.get("/", (req, res) => {
 
 /// THIS WORKS
 
-app.post("/reader", readerController.create);
+app.post("/readers", readerController.create);
+app.get("/reader", readerController.findAll);
 
 /// THIS WORKS too, but I don't get sends "201"
 // app.post("/readers", (req, res) => {
