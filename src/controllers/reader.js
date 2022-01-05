@@ -1,6 +1,6 @@
 const { Reader } = require("../models");
 
-// const create = (req, res) => {
+// exports.create = (req, res) => {
 // 	Reader.create(req.body)
 // 		.then((artist) => {
 // 			if (artist) {
@@ -14,4 +14,5 @@ const { Reader } = require("../models");
 
 exports.create = (req, res) => {
 	res.status(201).send("reader created");
+	console.log("****hello from create function");
 };
