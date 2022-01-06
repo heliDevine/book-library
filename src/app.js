@@ -1,5 +1,6 @@
 const express = require("express");
 const readerController = require("./controllers/reader");
+const bookController = require("./controllers/book");
 // const { Reader } = require("../models");
 // const router = express.Router();
 
@@ -20,7 +21,7 @@ app.post("/readers", readerController.create);
 app.get("/reader", readerController.findAll);
 app.get("/reader/:id", readerController.findById);
 app.patch("/reader/:id", readerController.updateEmail);
-app.delete("/readers/:id", readerController.deleteReader);
+app.delete("/reader/:id", readerController.deleteReader);
 
 /// THIS WORKS too, but I don't get sends "201"
 // app.post("/readers", (req, res) => {

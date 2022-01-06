@@ -8,8 +8,10 @@ exports.create = async (req, res) => {
 	res.status(201).json(newReader);
 };
 //// FIND ALL
-exports.findAll = async (req, res) => {
-	await Reader.findAll().then((readers) => res.json(readers));
+exports.findAll = (req, res) => {
+	Reader.findAll()
+		.then((readers) => res.json(readers))
+		.catch((err) => res.status(404).send(err));
 };
 
 //// FIND BY PRIMARY KEY
@@ -37,14 +39,11 @@ exports.updateEmail = async (req, res) => {
 		where: { id: readerId },
 	});
 
-	try {
-		if (updateData) {
-			res.status(200).json(updatedRows);
-		} else {
-			res.status(404).json({ error: "The reader could not be found." });
-		}
-	} catch (err) {
-		res.status(500).send(err);
+	if (updatedRows) {
+		res.status(200).json(updatedRows);
+	} else {
+		console.log("*** hello****");
+		res.status(404).json({ error: "The reader could not be found." });
 	}
 };
 
@@ -55,12 +54,12 @@ exports.deleteReader = async (req, res) => {
 	const deleteRows = await Reader.destroy({
 		where: { id: readerId },
 	});
-
+	console.log(deleteRows, "******");
 	try {
 		if (!deleteRows) {
 			res.status(404).json({ error: "The reader could not be found." });
 		} else {
-			res.sendStatus(200);
+			res.sendStatus(204);
 		}
 	} catch (err) {
 		res.status(500).send(err);

@@ -1,48 +1,50 @@
 const { expect } = require("chai");
 const request = require("supertest");
-const { Reader } = require("../src/models");
+const { Book } = require("../src/models");
 const app = require("../src/app");
 
-describe("/readers", () => {
-	before(async () => Reader.sequelize.sync());
+describe("/books", () => {
+	before(async () => Book.sequelize.sync());
 
 	beforeEach(async () => {
-		await Reader.destroy({ where: {} });
+		await Book.destroy({ where: {} });
 	});
 
 	describe("with no records in the database", () => {
-		describe("POST /readers", () => {
-			it("creates a new reader in the database", async () => {
-				const response = await request(app).post("/readers").send({
-					name: "Elizabeth Bennet",
-					email: "future_ms_darcy@gmail.com",
-					password: "verysecretpassword",
+		describe("POST /books", () => {
+			it("creates a new book in the database", async () => {
+				const response = await request(app).post("/books").send({
+					title: "The Godfather",
+					author: "Mario Puzo",
+					genre: "crime",
+					ISBN: "978-0-0995-2812-8",
 				});
-				const newReaderRecord = await Reader.findByPk(response.body.id, {
+				const newBookRecord = await Book.findByPk(response.body.id, {
 					raw: true,
 				});
 
 				expect(response.status).to.equal(201);
-				expect(response.body.name).to.equal("Elizabeth Bennet");
-				expect(newReaderRecord.name).to.equal("Elizabeth Bennet");
-				expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
-				expect(newReaderRecord.password).to.equal("verysecretpassword");
+				expect(response.body.title).to.equal("The Godfather");
+				expect(newRBookRecord.title).to.equal("The Godfather");
+				expect(newBookRecord.genre).to.equal("crime");
+				expect(newBookRecord.password).to.equal("978-0-0995-2812-8");
 			});
 		});
 	});
 
 	describe("with records in the database", () => {
-		let readers;
+		let books;
 
 		beforeEach(async () => {
-			readers = await Promise.all([
-				Reader.create({
-					name: "Elizabeth Bennet",
-					email: "future_ms_darcy@gmail.com",
-					password: "verysecretpassword",
+			books = await Promise.all([
+				Book.create({
+					title: "The Godfather",
+					author: "Mario Puzo",
+					genre: "crime",
+					ISBN: "978-0-0995-2812-8",
 				}),
-				Reader.create({ name: "Arya Stark", email: "vmorgul@me.com" }),
-				Reader.create({ name: "Lyra Belacqua", email: "darknorth123@msn.org" }),
+				Book.create({ title: "Arya Stark", email: "vmorgul@me.com" }),
+				Book.create({ name: "Lyra Belacqua", email: "darknorth123@msn.org" }),
 			]);
 		});
 
@@ -104,10 +106,9 @@ describe("/readers", () => {
 			});
 		});
 
-		describe("DELETE /reader/:id", () => {
+		describe("DELETE /readers/:id", () => {
 			it("deletes reader record by id", async () => {
 				const reader = readers[0];
-				console.log(reader.id, "********");
 				const response = await request(app).delete(`/reader/${reader.id}`);
 				const deletedReader = await Reader.findByPk(reader.id, { raw: true });
 
@@ -116,7 +117,7 @@ describe("/readers", () => {
 			});
 
 			it("returns a 404 if the reader does not exist", async () => {
-				const response = await request(app).delete("/reader/12345");
+				const response = await request(app).delete("/readers/12345");
 				expect(response.status).to.equal(404);
 				expect(response.body.error).to.equal("The reader could not be found.");
 			});
