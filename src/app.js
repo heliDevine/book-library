@@ -18,7 +18,9 @@ app.get("/", (req, res) => {
 
 app.post("/readers", readerController.create);
 app.get("/reader", readerController.findAll);
-app.get("/readers/:id", readerController.findByPK);
+app.get("/reader/:id", readerController.findById);
+app.patch("/reader/:id", readerController.updateEmail);
+app.delete("/readers/:id", readerController.deleteReader);
 
 /// THIS WORKS too, but I don't get sends "201"
 // app.post("/readers", (req, res) => {

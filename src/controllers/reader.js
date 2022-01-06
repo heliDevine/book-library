@@ -6,7 +6,6 @@ const { Reader } = require("../models");
 exports.create = async (req, res) => {
 	const newReader = await Reader.create(req.body);
 	res.status(201).json(newReader);
-	console.log("****hello from *****222 create function");
 };
 //// FIND ALL
 exports.findAll = async (req, res) => {
@@ -15,29 +14,58 @@ exports.findAll = async (req, res) => {
 
 //// FIND BY PRIMARY KEY
 
-exports.findByPK = async (req, res) => {
-	const reader = await Reader.findByPK(req.params.id);
-	if (!reader) {
-		res.status(404).send("The reader could not be found.");
-	} else {
-		res.status(200).json(reader);
+exports.findById = async (req, res) => {
+	const reader = await Reader.findByPk(req.params.id);
+	try {
+		if (reader) {
+			res.status(200).json(reader);
+		} else {
+			res.status(404).json({ error: "The reader could not be found." });
+		}
+	} catch (err) {
+		res.status(500).send(err);
 	}
-	console.log("****hello from *****9999 findbyPK function");
 };
 
-// exports.findByPK = async (req, res) => {
-// 	let query;
-// 	if (req.params.userId) {
-// 		query = Reader.findByPK({
-// 			include: [
-// 				{ model: Reader, where: { id: req.params.userId } },
-// 			],
-// 		});
-// 	} else {
-// 		query = Reader.findByPK({ include: [Tag, User] });
-// 	}
-// 	return query.then((reader) => res.json(reader));
-// });
+//// UPDATE READER
+
+exports.updateEmail = async (req, res) => {
+	const readerId = req.params.id;
+	const updateData = req.body;
+
+	const [updatedRows] = await Reader.update(updateData, {
+		where: { id: readerId },
+	});
+
+	try {
+		if (updateData) {
+			res.status(200).json(updatedRows);
+		} else {
+			res.status(404).json({ error: "The reader could not be found." });
+		}
+	} catch (err) {
+		res.status(500).send(err);
+	}
+};
+
+//// DELETE reader
+exports.deleteReader = async (req, res) => {
+	const readerId = req.params.id;
+
+	const deleteRows = await Reader.destroy({
+		where: { id: readerId },
+	});
+
+	try {
+		if (!deleteRows) {
+			res.status(404).json({ error: "The reader could not be found." });
+		} else {
+			res.sendStatus(200);
+		}
+	} catch (err) {
+		res.status(500).send(err);
+	}
+};
 
 /// MY SOLUTION TO CREATE FUNCTION
 
