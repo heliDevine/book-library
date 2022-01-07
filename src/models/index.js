@@ -13,10 +13,12 @@ const setUpDatabase = () => {
 	});
 
 	const Reader = ReaderModel(connection, Sequelize);
+	const Book = BookModel(connection, Sequelize);
 
 	connection.sync({ alter: true });
 	return {
 		Reader,
+		Book,
 	};
 };
 

@@ -41,8 +41,16 @@ describe("/readers", () => {
 					email: "future_ms_darcy@gmail.com",
 					password: "verysecretpassword",
 				}),
-				Reader.create({ name: "Arya Stark", email: "vmorgul@me.com" }),
-				Reader.create({ name: "Lyra Belacqua", email: "darknorth123@msn.org" }),
+				Reader.create({
+					name: "Arya Stark",
+					email: "vmorgul@me.com",
+					password: "verysecretpassword1",
+				}),
+				Reader.create({
+					name: "Lyra Belacqua",
+					email: "darknorth123@msn.org",
+					password: "verysecretpassword2",
+				}),
 			]);
 		});
 
@@ -107,7 +115,6 @@ describe("/readers", () => {
 		describe("DELETE /reader/:id", () => {
 			it("deletes reader record by id", async () => {
 				const reader = readers[0];
-				console.log(reader.id, "********");
 				const response = await request(app).delete(`/reader/${reader.id}`);
 				const deletedReader = await Reader.findByPk(reader.id, { raw: true });
 

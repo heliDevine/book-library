@@ -42,7 +42,6 @@ exports.updateEmail = async (req, res) => {
 	if (updatedRows) {
 		res.status(200).json(updatedRows);
 	} else {
-		console.log("*** hello****");
 		res.status(404).json({ error: "The reader could not be found." });
 	}
 };
@@ -54,7 +53,6 @@ exports.deleteReader = async (req, res) => {
 	const deleteRows = await Reader.destroy({
 		where: { id: readerId },
 	});
-	console.log(deleteRows, "******");
 	try {
 		if (!deleteRows) {
 			res.status(404).json({ error: "The reader could not be found." });
