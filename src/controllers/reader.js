@@ -5,6 +5,10 @@ const { Reader } = require("../models");
 /// CREATE
 exports.create = async (req, res) => {
 	const newReader = await Reader.create(req.body);
+	//if no name throw an error,
+	//if password not 8 characters throw an error
+	//if not an email throw an error
+	//else
 	res.status(201).json(newReader);
 };
 //// FIND ALL

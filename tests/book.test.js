@@ -29,6 +29,17 @@ describe("/books", () => {
 				expect(newBookRecord.genre).to.equal("crime");
 				expect(newBookRecord.ISBN).to.equal("978-0-0995-2812-8");
 			});
+
+			it("cannot create a book if there is no author or title", async () => {
+				const response = await request(app).post("/books").send({});
+				const newBookRecord = await Book.findByPk(response.body.id, {
+					raw: true,
+				});
+
+				expect(response.status).to.equal(400);
+				expect(response.body.errors.length).to.equal(2);
+				expect(newBookRecord).to.equal(null);
+			});
 		});
 	});
 
