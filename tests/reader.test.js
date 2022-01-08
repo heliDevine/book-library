@@ -29,10 +29,41 @@ describe("/readers", () => {
 				expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
 				expect(newReaderRecord.password).to.equal("verysecretpassword");
 			});
-			it("errors if an email or password are in the wrong format", async () => {
+
+			it("errors if name is an empty string", async () => {
+				const response = await request(app).post("/readers").send({
+					name: "",
+					password: "12345667895678",
+					email: "email@domain.com",
+				});
+				const newReaderRecord = await Reader.findByPk(response.body.id, {
+					raw: true,
+				});
+
+				expect(response.status).to.equal(400);
+				expect(response.body.errors.length).to.equal(1);
+				expect(newReaderRecord).to.equal(null);
+			});
+
+			it("errors if an email or is wrong format", async () => {
 				const response = await request(app).post("/readers").send({
 					name: "Elizabeth Bennet",
 					email: "future_ms_darcygmail.com",
+					password: "12345667895678",
+				});
+				const newReaderRecord = await Reader.findByPk(response.body.id, {
+					raw: true,
+				});
+
+				expect(response.status).to.equal(400);
+				expect(response.body.errors.length).to.equal(1);
+				expect(newReaderRecord).to.equal(null);
+			});
+
+			it("errors if an password or is wrong format", async () => {
+				const response = await request(app).post("/readers").send({
+					name: "Elizabeth Bennet",
+					email: "future_ms@darcygmail.com",
 					password: "123",
 				});
 				const newReaderRecord = await Reader.findByPk(response.body.id, {
@@ -40,26 +71,42 @@ describe("/readers", () => {
 				});
 
 				expect(response.status).to.equal(400);
-				expect(response.body.errors.length).to.equal(8);
+				expect(response.body.errors.length).to.equal(1);
 				expect(newReaderRecord).to.equal(null);
 			});
 
-			it("errors if any of the fields are missing", async () => {
-				const response = await request(app).post("/readers").send({});
+			it("errors if name is missing", async () => {
+				const response = await request(app).post("/readers").send({
+					email: "future_ms@darcygmail.com",
+					password: "12345667895678",
+				});
 				const newReaderRecord = await Reader.findByPk(response.body.id, {
 					raw: true,
 				});
 
 				expect(response.status).to.equal(400);
-				expect(response.body.errors.length).to.equal(3);
+				expect(response.body.errors.length).to.equal(1);
 				expect(newReaderRecord).to.equal(null);
 			});
 
-			it("errors if name is an empty string", async () => {
+			it("errors if email is missing", async () => {
 				const response = await request(app).post("/readers").send({
-					name: "",
+					name: "Elizabeth Bennet",
 					password: "12345667895678",
-					email: "email@domain.com",
+				});
+				const newReaderRecord = await Reader.findByPk(response.body.id, {
+					raw: true,
+				});
+
+				expect(response.status).to.equal(400);
+				expect(response.body.errors.length).to.equal(1);
+				expect(newReaderRecord).to.equal(null);
+			});
+
+			it("errors if password is missing", async () => {
+				const response = await request(app).post("/readers").send({
+					name: "Elizabeth Bennet",
+					email: "future_ms@darcygmail.com",
 				});
 				const newReaderRecord = await Reader.findByPk(response.body.id, {
 					raw: true,

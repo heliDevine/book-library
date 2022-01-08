@@ -4,12 +4,25 @@ const { Reader } = require("../models");
 
 /// CREATE
 exports.create = async (req, res) => {
-	const newReader = await Reader.create(req.body);
+	try {
+		const newReader = await Reader.create(req.body);
+
+		res.status(201).json(newReader);
+	} catch (err) {
+		if (
+			err.name === "SequelizeValidationError" ||
+			err.email === "SequelizeValidationError"
+		) {
+			res.status(400).json({ errors: err.errors });
+		} else {
+			console.log(err.email);
+			res.status(500).json(err);
+		}
+	}
 	//if no name throw an error,
 	//if password not 8 characters throw an error
 	//if not an email throw an error
 	//else
-	res.status(201).json(newReader);
 };
 //// FIND ALL
 exports.findAll = (req, res) => {

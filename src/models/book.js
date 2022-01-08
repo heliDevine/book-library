@@ -11,6 +11,10 @@ module.exports = (connection, DataTypes) => {
 	return BookModel;
 };
 
+// - title: String
+//         * Check if title exists
+//     - author: String
+//         * Check if author exists
 // Make sure constraints and validation are added to the Book model.
 // Make sure the controller knows how to handle the different error messages the model might throw.
 // Write unit tests that make sure that this functionality is in place.
