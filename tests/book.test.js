@@ -30,14 +30,33 @@ describe("/books", () => {
 				expect(newBookRecord.ISBN).to.equal("978-0-0995-2812-8");
 			});
 
-			it("cannot create a book if there is no author or title", async () => {
-				const response = await request(app).post("/books").send({});
+			it("cannot create a book if there is no author", async () => {
+				const response = await request(app).post("/books").send({
+					title: "The Godfather",
+					genre: "crime",
+					ISBN: "978-0-0995-2812-8",
+				});
 				const newBookRecord = await Book.findByPk(response.body.id, {
 					raw: true,
 				});
 
 				expect(response.status).to.equal(400);
-				expect(response.body.errors.length).to.equal(2);
+				expect(response.body.errors.length).to.equal(1);
+				expect(newBookRecord).to.equal(null);
+			});
+
+			it("cannot create a book if there is no title", async () => {
+				const response = await request(app).post("/books").send({
+					author: "Mario Puzo",
+					genre: "crime",
+					ISBN: "978-0-0995-2812-8",
+				});
+				const newBookRecord = await Book.findByPk(response.body.id, {
+					raw: true,
+				});
+
+				expect(response.status).to.equal(400);
+				expect(response.body.errors.length).to.equal(1);
 				expect(newBookRecord).to.equal(null);
 			});
 		});

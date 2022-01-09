@@ -9,20 +9,12 @@ exports.create = async (req, res) => {
 
 		res.status(201).json(newReader);
 	} catch (err) {
-		if (
-			err.name === "SequelizeValidationError" ||
-			err.email === "SequelizeValidationError"
-		) {
+		if (err.name === "SequelizeValidationError") {
 			res.status(400).json({ errors: err.errors });
 		} else {
-			console.log(err.email);
 			res.status(500).json(err);
 		}
 	}
-	//if no name throw an error,
-	//if password not 8 characters throw an error
-	//if not an email throw an error
-	//else
 };
 //// FIND ALL
 exports.findAll = (req, res) => {

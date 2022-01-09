@@ -1,10 +1,25 @@
 const { Book } = require("../models");
 
 // CREATES NEW BOOK
+// exports.create = async (req, res) => {
+// 	const newBook = await Book.create(req.body);
+// 	res.status(201).json(newBook);
+// };
+
 exports.create = async (req, res) => {
-	const newBook = await Book.create(req.body);
-	res.status(201).json(newBook);
+	try {
+		const newBook = await Book.create(req.body);
+
+		res.status(201).json(newBook);
+	} catch (err) {
+		if (err.name === "SequelizeValidationError") {
+			res.status(400).json({ errors: err.errors });
+		} else {
+			res.status(500).json(err);
+		}
+	}
 };
+
 //// FIND ALL
 exports.findAll = (req, res) => {
 	Book.findAll()
