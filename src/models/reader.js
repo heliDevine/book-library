@@ -25,12 +25,16 @@ module.exports = (connection, DataTypes) => {
 		password: {
 			type: DataTypes.STRING,
 			allowNull: false,
+
 			validate: {
 				len: {
 					args: [8],
 					msg: "Password needs to be longer than 8 characters",
 				},
 			},
+			// set(value) {
+			// 	this.setDataValue("password", hash(value));
+			// },
 		},
 	};
 	const ReaderModel = connection.define("Reader", schema);

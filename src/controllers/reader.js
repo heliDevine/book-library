@@ -1,4 +1,3 @@
-// const { Reader } = require("../models");
 const app = require("../app");
 const { Reader } = require("../models");
 

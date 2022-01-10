@@ -1,40 +1,40 @@
-const { expect } = require("chai");
-const request = require("supertest");
-const { Book } = require("../src/models");
-const app = require("../src/app");
+const { expect } = require('chai');
+const request = require('supertest');
+const { Book } = require('../src/models');
+const app = require('../src/app');
 
-describe("/books", () => {
+describe('/books', () => {
 	before(async () => Book.sequelize.sync());
 
 	beforeEach(async () => {
 		await Book.destroy({ where: {} });
 	});
 
-	describe("with no records in the database", () => {
-		describe("POST /books", () => {
-			it("creates a new book in the database", async () => {
-				const response = await request(app).post("/books").send({
-					title: "The Godfather",
-					author: "Mario Puzo",
-					genre: "crime",
-					ISBN: "978-0-0995-2812-8",
+	describe('with no records in the database', () => {
+		describe('POST /book', () => {
+			it('creates a new book in the database', async () => {
+				const response = await request(app).post('/book').send({
+					title: 'The Godfather',
+					author: 'Mario Puzo',
+					genre: 'crime',
+					ISBN: '978-0-0995-2812-8',
 				});
 				const newBookRecord = await Book.findByPk(response.body.id, {
 					raw: true,
 				});
 
 				expect(response.status).to.equal(201);
-				expect(response.body.title).to.equal("The Godfather");
-				expect(newBookRecord.title).to.equal("The Godfather");
-				expect(newBookRecord.genre).to.equal("crime");
-				expect(newBookRecord.ISBN).to.equal("978-0-0995-2812-8");
+				expect(response.body.title).to.equal('The Godfather');
+				expect(newBookRecord.title).to.equal('The Godfather');
+				expect(newBookRecord.genre).to.equal('crime');
+				expect(newBookRecord.ISBN).to.equal('978-0-0995-2812-8');
 			});
 
-			it("cannot create a book if there is no author", async () => {
-				const response = await request(app).post("/books").send({
-					title: "The Godfather",
-					genre: "crime",
-					ISBN: "978-0-0995-2812-8",
+			it('cannot create a book if there is no author', async () => {
+				const response = await request(app).post('/book').send({
+					title: 'The Godfather',
+					genre: 'crime',
+					ISBN: '978-0-0995-2812-8',
 				});
 				const newBookRecord = await Book.findByPk(response.body.id, {
 					raw: true,
@@ -45,11 +45,11 @@ describe("/books", () => {
 				expect(newBookRecord).to.equal(null);
 			});
 
-			it("cannot create a book if there is no title", async () => {
-				const response = await request(app).post("/books").send({
-					author: "Mario Puzo",
-					genre: "crime",
-					ISBN: "978-0-0995-2812-8",
+			it('cannot create a book if there is no title', async () => {
+				const response = await request(app).post('/book').send({
+					author: 'Mario Puzo',
+					genre: 'crime',
+					ISBN: '978-0-0995-2812-8',
 				});
 				const newBookRecord = await Book.findByPk(response.body.id, {
 					raw: true,
@@ -62,35 +62,35 @@ describe("/books", () => {
 		});
 	});
 
-	describe("with records in the database", () => {
+	describe('with records in the database', () => {
 		let books;
 
 		beforeEach(async () => {
 			books = await Promise.all([
 				Book.create({
-					title: "The Godfather",
-					author: "Mario Puzo",
-					genre: "crime",
-					ISBN: "978-0-0995-2812-8",
+					title: 'The Godfather',
+					author: 'Mario Puzo',
+					genre: 'crime',
+					ISBN: '978-0-0995-2812-8',
 				}),
 				Book.create({
-					title: "Kitchen Confidental",
-					author: "Anthony Bourdain",
-					genre: "autography",
-					ISBN: "978-1-4088-4504-2",
+					title: 'Kitchen Confidental',
+					author: 'Anthony Bourdain',
+					genre: 'autography',
+					ISBN: '978-1-4088-4504-2',
 				}),
 				Book.create({
-					title: "The fuck-it list",
-					author: "John Niven",
-					genre: "fiction",
-					ISBN: "978-0-434-02326-4",
+					title: 'The fuck-it list',
+					author: 'John Niven',
+					genre: 'fiction',
+					ISBN: '978-0-434-02326-4',
 				}),
 			]);
 		});
 
-		describe("GET /books", () => {
-			it("gets all books records", async () => {
-				const response = await request(app).get("/book");
+		describe('GET /book', () => {
+			it('gets all books records', async () => {
+				const response = await request(app).get('/book');
 
 				expect(response.status).to.equal(200);
 				expect(response.body.length).to.equal(3);
@@ -104,8 +104,8 @@ describe("/books", () => {
 			});
 		});
 
-		describe("GET /books/:id", () => {
-			it("gets books record by id", async () => {
+		describe('GET /book/:id', () => {
+			it('gets books record by id', async () => {
 				const book = books[0];
 				const response = await request(app).get(`/book/${book.id}`);
 
@@ -114,40 +114,40 @@ describe("/books", () => {
 				expect(response.body.author).to.equal(book.author);
 			});
 
-			it("returns a 404 if the book does not exist", async () => {
-				const response = await request(app).get("/book/12345");
+			it('returns a 404 if the book does not exist', async () => {
+				const response = await request(app).get('/book/12345');
 
 				expect(response.status).to.equal(404);
-				expect(response.body.error).to.equal("The book could not be found.");
+				expect(response.body.error).to.equal('The book could not be found.');
 			});
 		});
 
-		describe("PATCH /books/:id", () => {
-			it("updates books title by id", async () => {
+		describe('PATCH /book/:id', () => {
+			it('updates books title by id', async () => {
 				const book = books[0];
 				const response = await request(app)
 					.patch(`/book/${book.id}`)
-					.send({ title: "1984" });
+					.send({ title: '1984' });
 				const updatedBookRecord = await Book.findByPk(book.id, {
 					raw: true,
 				});
 
 				expect(response.status).to.equal(200);
-				expect(updatedBookRecord.title).to.equal("1984");
+				expect(updatedBookRecord.title).to.equal('1984');
 			});
 
-			it("returns a 404 if the book does not exist", async () => {
+			it('returns a 404 if the book does not exist', async () => {
 				const response = await request(app)
-					.patch("/book/12345")
-					.send({ title: "Animal farm" });
+					.patch('/book/12345')
+					.send({ title: 'Animal farm' });
 
 				expect(response.status).to.equal(404);
-				expect(response.body.error).to.equal("The book could not be found.");
+				expect(response.body.error).to.equal('The book could not be found.');
 			});
 		});
 
-		describe("DELETE /books/:id", () => {
-			it("deletes book record by id", async () => {
+		describe('DELETE /book/:id', () => {
+			it('deletes book record by id', async () => {
 				const book = books[0];
 				const response = await request(app).delete(`/book/${book.id}`);
 				const deletedBook = await Book.findByPk(book.id, { raw: true });
@@ -156,10 +156,10 @@ describe("/books", () => {
 				expect(deletedBook).to.equal(null);
 			});
 
-			it("returns a 404 if the book does not exist", async () => {
-				const response = await request(app).delete("/book/12345");
+			it('returns a 404 if the book does not exist', async () => {
+				const response = await request(app).delete('/book/12345');
 				expect(response.status).to.equal(404);
-				expect(response.body.error).to.equal("The book could not be found.");
+				expect(response.body.error).to.equal('The book could not be found.');
 			});
 		});
 	});
