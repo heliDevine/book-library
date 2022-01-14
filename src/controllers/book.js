@@ -1,11 +1,5 @@
 const { Book } = require("../models");
 
-// CREATES NEW BOOK
-// exports.create = async (req, res) => {
-// 	const newBook = await Book.create(req.body);
-// 	res.status(201).json(newBook);
-// };
-
 exports.create = async (req, res) => {
 	try {
 		const newBook = await Book.create(req.body);
@@ -40,6 +34,7 @@ exports.findById = async (req, res) => {
 		res.status(500).send(err);
 	}
 };
+//// UPDATE title
 exports.updateTitle = async (req, res) => {
 	const bookId = req.params.id;
 	const updateData = req.body;

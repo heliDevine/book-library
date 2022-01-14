@@ -7,7 +7,7 @@ module.exports = (connection, DataTypes) => {
 			validate: {
 				notEmpty: {
 					args: [true],
-					msg: "name cannot be an empty string",
+					msg: 'name cannot be an empty string',
 				},
 			},
 		},
@@ -18,7 +18,7 @@ module.exports = (connection, DataTypes) => {
 				isEmail: true,
 				notEmpty: {
 					args: [true],
-					msg: "no email inserted",
+					msg: 'no email inserted',
 				},
 			},
 		},
@@ -29,14 +29,11 @@ module.exports = (connection, DataTypes) => {
 			validate: {
 				len: {
 					args: [8],
-					msg: "Password needs to be longer than 8 characters",
+					msg: 'Password needs to be longer than 8 characters',
 				},
 			},
-			// set(value) {
-			// 	this.setDataValue("password", hash(value));
-			// },
 		},
 	};
-	const ReaderModel = connection.define("Reader", schema);
+	const ReaderModel = connection.define('Reader', schema);
 	return ReaderModel;
 };

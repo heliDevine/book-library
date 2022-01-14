@@ -8,7 +8,7 @@ module.exports = (connection, DataTypes) => {
 			validate: {
 				notEmpty: {
 					args: [true],
-					msg: "book needs to have a title",
+					msg: 'book needs to have a title',
 				},
 			},
 		},
@@ -18,21 +18,19 @@ module.exports = (connection, DataTypes) => {
 			validate: {
 				notEmpty: {
 					args: [true],
-					msg: "book needs to have an author",
+					msg: 'book needs to have an author',
 				},
 			},
 		},
 
 		genre: {
 			type: DataTypes.STRING,
-			// allowNull: false,
 		},
 
 		ISBN: {
 			type: DataTypes.STRING,
-			// allowNull: false,
 		},
 	};
-	const BookModel = connection.define("Book", schema);
+	const BookModel = connection.define('Book', schema);
 	return BookModel;
 };
